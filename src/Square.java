@@ -1,4 +1,5 @@
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 public class Square extends JButton {
 	private boolean inMoveSet;
@@ -12,11 +13,18 @@ public class Square extends JButton {
 	}
 
 	public void click() {
-		if (b.getSelectedPiece() == null && b.getPieceAtPos(pos) != null)
+		if (b.getSelectedPiece() == null && b.getPieceAtPos(pos) != null) {
 			b.getPieceAtPos(pos).select();
-		else if (inMoveSet && b.getSelectedPiece() != null)
+		} else if (inMoveSet && b.getSelectedPiece() != null) {
 			b.getSelectedPiece().move(pos);
-		else {
+			
+			if (b.testCheck(true)) {
+				JOptionPane.showMessageDialog(null, "White King is in check!");
+			} else if (b.testCheck(false)) {
+				JOptionPane.showMessageDialog(null, "Black King is in check!");
+			}
+			
+		} else {
 			b.setSelectedPiece(null);
 			b.unhighlightMoves();
 		}

@@ -10,6 +10,11 @@ public class Board extends JPanel {
 	private Piece selectedPiece;
 	private boolean whiteCastle;
 	private boolean blackCastle;
+	
+	//==============================
+	public Position wKingPos;
+	public Position bKingPos;
+	//==============================
 
 	public Board() {
 		pieces = new ArrayList<Piece>();
@@ -101,6 +106,9 @@ public class Board extends JPanel {
 		pieces.add(new Bishop(new Position(7, 5), this, true));
 		pieces.add(new Knight(new Position(7, 6), this, true));
 		
+		wKingPos = new Position(7, 4);
+		bKingPos = new Position(0, 4);
+		
 		whiteCastle = true;
 		blackCastle = true;
 		
@@ -114,7 +122,7 @@ public class Board extends JPanel {
 		}
 		return null;
 	}
-
+	
 	public Piece getSelectedPiece() {
 		return selectedPiece;
 	}
@@ -148,6 +156,27 @@ public class Board extends JPanel {
 		}
 		return ret;
 	}
+	
+	//====================================================
+	public boolean testCheck(boolean isWhite) { // checking if the king of isWhite color is in check
+		for (Piece p : pieces) {
+			if (p.isWhite != isWhite) {
+				for (Position pos : p.getMoveSet()) {
+					if (isWhite) {
+						if (pos.equals(wKingPos)) {
+							return true;
+						}
+					} else {
+						if (pos.equals(bKingPos)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	//====================================================
 	
 	public boolean whiteCanCastle() {
 		return whiteCastle;

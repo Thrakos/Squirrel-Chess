@@ -37,6 +37,16 @@ public class King extends Piece {
 	}
 	
 	@Override
+	public void move(Position pos) {
+		super.move(pos);
+		if (isWhite) {
+			b.wKingPos = pos;
+		} else {
+			b.bKingPos = pos;
+		}
+	}
+	
+	@Override
 	public void draw() {
 		
 	}
