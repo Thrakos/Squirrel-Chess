@@ -59,7 +59,7 @@ public class Pawn extends Piece {
 	}
 
 	public String toString() {
-		return "Pawn" + super.toString();
+		return super.toString() + "Pawn";
 	}
 
 	private void promoMenu() {

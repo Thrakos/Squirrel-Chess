@@ -1,23 +1,32 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Board extends JPanel {
+	private Chess game;
 	private Square[][] squares;
 	private ArrayList<Piece> pieces;
 	private Piece selectedPiece;
+	private Timer timer;
+	private Time whiteTime;
+	private Time blackTime;
 	private boolean whiteCastle;
 	private boolean blackCastle;
+	private boolean whiteTurn;
 	
-	//==============================
 	public Position wKingPos;
 	public Position bKingPos;
-	//==============================
 
-	public Board() {
+	public Board(Chess game) {
+		this.game = game;
 		pieces = new ArrayList<Piece>();
+		whiteTime = new Time(5, 0);
+		blackTime = new Time(5, 0);
+		timer = new timer(10,)
 		initBoard();
 		initPieces();
 	}
