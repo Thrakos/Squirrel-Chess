@@ -26,12 +26,22 @@ public class Board extends JPanel {
 		pieces = new ArrayList<Piece>();
 		whiteTime = new Time(5, 0);
 		blackTime = new Time(5, 0);
-		timer = new timer(10,)
+		timer = new Timer(10, (e) -> {
+			if (whiteTurn) {
+				whiteTime.increment();
+			} else {
+				blackTime.increment();
+			}
+		});
+		setPreferredSize(new Dimension(1000, 1000));
+		game.setText("White's turn.");
 		initBoard();
 		initPieces();
+		timer.start();
 	}
 
 	public void highlightMoves(Piece p) {
+		squares[p.getPos().getRow()][p.getPos().getCol()].setBackground(Color.GREEN);
 		for (Position pos : p.getMoveSet()) {
 			squares[pos.getRow()][pos.getCol()].setBackground(new Color(160, 255, 160));
 			squares[pos.getRow()][pos.getCol()].setInMoveSet(true);
@@ -59,16 +69,18 @@ public class Board extends JPanel {
 	private void initBoard() {
 		squares = new Square[8][8];
 		selectedPiece = null;
+		setSize(1000, 1000);
 		setLayout(new GridLayout(8, 8));
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				squares[i][j] = new Square(this, new Position(i, j));
 				squares[i][j].setOpaque(true);
 				squares[i][j].setBorderPainted(false);
-				if ((i + j) % 2 == 1)
+				if ((i + j) % 2 == 1) {
 					squares[i][j].setBackground(Color.LIGHT_GRAY);
-				else
+				} else {
 					squares[i][j].setBackground(Color.WHITE);
+				}
 				int a = i;
 				int b = j;
 				squares[i][j].addActionListener((e) -> {
@@ -77,6 +89,9 @@ public class Board extends JPanel {
 				add(squares[i][j]);
 			}
 		}
+		whiteTurn = true;
+		whiteCastle = true;
+		blackCastle = true;
 	}
 
 	private void initPieces() {
@@ -126,8 +141,9 @@ public class Board extends JPanel {
 
 	public Piece getPieceAtPos(Position pos) {
 		for (Piece p : pieces) {
-			if (p.getPos().equals(pos))
+			if (p.getPos().equals(pos)) {
 				return p;
+			}
 		}
 		return null;
 	}
@@ -166,7 +182,6 @@ public class Board extends JPanel {
 		return ret;
 	}
 	
-	//====================================================
 	public boolean testCheck(boolean isWhite) { // checking if the king of isWhite color is in check
 		for (Piece p : pieces) {
 			if (p.isWhite != isWhite) {
@@ -185,7 +200,6 @@ public class Board extends JPanel {
 		}
 		return false;
 	}
-	//====================================================
 	
 	public boolean whiteCanCastle() {
 		return whiteCastle;
@@ -201,5 +215,22 @@ public class Board extends JPanel {
 	
 	public void setBlackCastle(boolean blackCastle) {
 		this.blackCastle = blackCastle;
+	}
+	
+	public void nextTurn() {
+		whiteTurn = !whiteTurn;
+		for (Piece p : pieces) {
+			p.setPos(new Position(7 - p.getPos().getRow(), 7 - p.getPos().getCol()));
+		}
+		updateText();
+		System.out.println("White: " + whiteTime + "\nBlack: " + blackTime);
+		if (whiteTurn)
+			game.setText(blackTime + "\nWhite's turn.\n" + whiteTime);
+		else
+			game.setText(whiteTime + "\nBlack's turn.\n" + blackTime);
+	}
+	
+	public boolean getWhiteTurn() {
+		return whiteTurn;
 	}
 }
